@@ -18,6 +18,7 @@ int main()
 struct sexp *sexp_parse(FILE *f, char close)
 {
         struct sexp *exp = calloc(1, sizeof(struct sexp));
+        struct sexp *at = exp;
         char *name = exp->name;
         char inspace = 0, firstword = 1;
 
@@ -25,7 +26,7 @@ struct sexp *sexp_parse(FILE *f, char close)
                 char c = fgetc(f);
                 if (c == close) return exp;
                 switch (c) {
-                case '(': exp->child = sexp_parse(f, ')'); break;
+                case '(': at->child = sexp_parse(f, ')'); break;
                 case ' ': firstword = 0;
                           inspace = 1;
                           break;
@@ -34,7 +35,8 @@ struct sexp *sexp_parse(FILE *f, char close)
                 default :
                           if (inspace) {
                                   ungetc(c, f);
-                                  exp->next = sexp_parse(f, ' ');
+                                  at->next = sexp_parse(f, ' ');
+                                  at = at->next;
                           } else if (firstword) {
                                   *(name++) = c;
                           }
@@ -46,13 +48,13 @@ struct sexp *sexp_parse(FILE *f, char close)
 static void sexp_print(struct sexp *exp)
 {
         printf("%s", exp->name);
-        if (exp->next) {
-                printf(" ");
-                sexp_print(exp->next);
-        }
         if (exp->child) {
                 printf("(");
                 sexp_print(exp->child);
                 printf(")");
+        }
+        if (exp->next) {
+                printf(" ");
+                sexp_print(exp->next);
         }
 }
