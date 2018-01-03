@@ -1,12 +1,25 @@
 #include <stdio.h>
 
-#include "base32.hh"
+#include "charset.hh"
+
+char good_char(char c) {
+    const charset::Charset* where[] = { &charset::base32,
+                                        &charset::hex,
+                                        &charset::hex };
+    static int pos = 0;
+    if(where[pos][0][c]) {
+        char out = where[pos][0][c];
+        pos = (pos+1) % 3;
+        return out;
+    }
+    return 0;
+}
 
 int main() {
     for(;;) {
         char c = getchar();
-        if(c == '\n' || base32.valid(c)) {
-            printf("%c", base32[c]);
+        if(c == '\n' || (c=good_char(c))) {
+            printf("%c", c);
         } else {
             putchar('%');
         };

@@ -1,9 +1,15 @@
 //#include <stdio.h>
 
-static class Base32_lut {
+class Charset {
+    virtual char operator[](unsigned char i) = 0;
+    virtual bool contains(unsigned char i) = 0;
+    virtual bool valid(unsigned char i) = 0;
+};
+
+class Base32 : public Charset {
     unsigned char c[256] = {0};
 public:
-    Base32_lut() {
+    Base32() {
         for(int i=0; i<256; ++i) {
             if(i >= 'a' && i <= 'z')
                 c[i] = i + 'A' - 'a';
@@ -26,5 +32,5 @@ public:
     bool valid(unsigned char i) {
         return c[i] != 0;
     }
-} base32;
+};
 

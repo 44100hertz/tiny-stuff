@@ -26,6 +26,14 @@ const char* strings[NUM_A][NUM_B] = {
     },
 };
 
+const char* strings =
+    "hello,  ",
+    "world.\n ",
+    "        ",
+    "        ",
+    "        ",
+    "        ";
+
 char* getstring(int a, int b) {
     switch(a) {
     case A1: switch(b) {

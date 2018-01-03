@@ -1,3 +1,20 @@
-/* main(i){for(i=0;i++<100;)printf("%d\n\0  Fizz\n\0Buzz\n\0FizzBuzz\n"+6*!(i%3)+12*!(i%5),i);} */
+#include <stdio.h>
 
-main(i){for(;i<101;puts(i++%5?"":"buzz"))printf("%i\r%s",i,i%3?"":"fizz");}
+int main() {
+	for(int i=1; i<=100; ++i) {
+		if(i%3) {
+			if(i%5) goto num;
+			goto buzz;
+		}
+		printf("fizz");
+		if(i%5) goto end;
+buzz:
+		printf("buzz");
+		goto end;
+num:
+		printf("%d", i);
+end:
+		puts("");
+	}
+	return 0;
+}
